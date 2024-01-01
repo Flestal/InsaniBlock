@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -56,7 +57,10 @@ public class ScoreWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //if(Input.GetKeyDown(KeyCode.C))
+        //{
+        //    ScreenCapture.CaptureScreenshot(Application.dataPath+"/Capture-"+DateTime.Now.ToString("yyyy.MM.dd HH-mm-ss")+".png");
+        //}
     }
     public void AppendHighScore()
     {
