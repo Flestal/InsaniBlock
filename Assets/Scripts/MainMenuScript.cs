@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MainMenuScript : MonoBehaviour
 {
     [SerializeField] GameObject MainMenu, HighScore, Upgrade;
-    [SerializeField] Button btn_StartGame, btn_HighScore, btn_GotoMain_Highscore, btn_ScoreReset, btn_PurchaseUpgrade, btn_GotoMain_Upgrade;
+    [SerializeField] Button btn_StartGame, btn_HighScore, btn_GotoMain_Highscore, btn_ScoreReset, btn_PurchaseUpgrade, btn_GotoMain_Upgrade, btn_ResetUpgrade;
     [SerializeField] TMP_Text HighScoreText, balanceText;
     [SerializeField] List<GameObject> btn_Upgrades;
     // Start is called before the first frame update
@@ -37,6 +37,10 @@ public class MainMenuScript : MonoBehaviour
         btn_GotoMain_Upgrade.onClick.AddListener(() =>
         {
             ClickMainMenu();
+        });
+        btn_ResetUpgrade.onClick.AddListener(() =>
+        {
+            ClickUpgradeReset();
         });
     }
 
@@ -82,6 +86,11 @@ public class MainMenuScript : MonoBehaviour
         UpgradeScript.Instance.RenderMenu(btn_Upgrades,balanceText);
         Upgrade.SetActive(true);
         MainMenu.SetActive(false);
+    }
+    public void ClickUpgradeReset()
+    {
+        UpgradeScript.Instance.ResetUpgrades();
+        UpgradeScript.Instance.RenderMenu(btn_Upgrades, balanceText);
     }
     public void AppendBalance(int balance)
     {

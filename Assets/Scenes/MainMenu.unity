@@ -538,6 +538,7 @@ MonoBehaviour:
   btn_ScoreReset: {fileID: 593275938}
   btn_PurchaseUpgrade: {fileID: 1896287723}
   btn_GotoMain_Upgrade: {fileID: 1044865554}
+  btn_ResetUpgrade: {fileID: 492501074}
   HighScoreText: {fileID: 1399174526}
   balanceText: {fileID: 921223092}
   btn_Upgrades:

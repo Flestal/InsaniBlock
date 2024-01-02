@@ -8,6 +8,8 @@ public class Block : MonoBehaviour
     [SerializeField] public int Number;//각 블록별 숫자
     [SerializeField] public float speed;//이속
     [SerializeField] TextMeshPro textMeshPro; //각 블록별 숫자 표시
+    private char[] NumberChars = new char[10];
+    int NumberCharsLength;
     float NumberSize;
     public void NumberRender()
     {
@@ -26,7 +28,9 @@ public class Block : MonoBehaviour
             NumberSize = 7f;
         }
         textMeshPro.fontSize = NumberSize;
-        textMeshPro.text = Number.ToString();
+        //textMeshPro.text = Number.ToString();
+        NumberCharsLength = Number.TMProNonAlloc(NumberChars);
+        textMeshPro.SetCharArray(NumberChars, 0, NumberCharsLength);
     }
     public void NumberAlpha(float alpha)
     {

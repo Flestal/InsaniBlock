@@ -15,7 +15,8 @@ public class UpgradeScript : MonoBehaviour
     //      이동속도 x5,
     //      뎀감(체력과 최대체력을 float로 변경) x5,
     //      무적시간 x3,
-    //      최종 점수배율(int 값, 소수점 버림) x5
+    //      최종 점수배율(int 값, 소수점 버림) x5,
+    //      맵에 아이템 생성(회복 포션, 무적 방패, , , 보호막)
     // }
 
     private void Awake()
