@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - NPCBlock
+  - Item
+  - Shield
+  - Filter
   layers:
   - Default
   - TransparentFX

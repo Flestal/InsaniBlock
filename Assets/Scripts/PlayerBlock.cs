@@ -17,11 +17,15 @@ public class PlayerBlock : Block
     public int Score;//점수 최대 기록
     bool Invincible;//무적
     int InvincibleGraphic;//무적 깜빡임
-    [SerializeField] float InvincibleTimeCheck;//무적시간
-    float invincibleTime;
-    [SerializeField] GameObject GameOver;
-    [SerializeField] TMP_Text GameOverText;
+    [SerializeField] float InvincibleTimeCheck_template;//무적시간
+    [SerializeField]float InvincibleTimeCheck;
+    [SerializeField]float invincibleTime;
+    public GameObject obj_Shield, obj_InvincibleEffect, GameOver;
+    [SerializeField] TMP_Text GameOverText, CoinResultText;
     [SerializeField] float ResultMag;
+    public bool Mirrored;
+    float ItemTime, ItemTimeLimit;
+    public int ThisRoundBalance;
 
     private void Awake()
     {
@@ -41,11 +45,14 @@ public class PlayerBlock : Block
         Number = 10;
         speed = 2.0f*Mathf.Pow(1.1f,upgrades[1]);//이속 업그레이드 스택당 1.1배 곱연산
         DR = 1 * Mathf.Pow(0.9f, upgrades[2]);//뎀감 업그레이드 스택당 0.9배 곱연산
-        InvincibleTimeCheck = 3.0f * Mathf.Pow(1.15f, upgrades[3]);//무적시간 업그레이드, 최대 3스택, 스택당 1.15배 곱연산
+        InvincibleTimeCheck_template = 3.0f * Mathf.Pow(1.15f, upgrades[3]);//무적시간 업그레이드, 최대 3스택, 스택당 1.15배 곱연산
         ResultMag = 1*Mathf.Pow(1.15f,upgrades[4]);//최종 점수 배율, 스택당 1.15배 곱연산
         Invincible = true;
+        InvincibleTimeCheck = 3f;
         invincibleTime = 0;
         InvincibleGraphic = 1;
+        ItemTime = -1;
+        Mirrored = false;
         NumberRender();
         GameOver.SetActive(false);
     }
@@ -63,6 +70,7 @@ public class PlayerBlock : Block
         //MoveCheck();
         InvincibleCheck();
         InvincibleRender();
+        ItemTimeCheck();
     }
     void MoveCheck()
     {
@@ -124,26 +132,26 @@ public class PlayerBlock : Block
         Move(dir, 2);
     }
 
-    IEnumerator blink(float time)
-    {
-        HPBar.enabled = true;
-        while (Invincible)
-        {
-            yield return new WaitForSeconds(time);
-            InvincibleGraphic++;
-            if(InvincibleGraphic%2==0)
-            {
-                InvincibleGraphic = 0;
-            }
-        }
-        HPBar.enabled = false;
-    }
+    //IEnumerator blink(float time)
+    //{
+    //    HPBar.enabled = true;
+    //    while (Invincible)
+    //    {
+    //        yield return new WaitForSeconds(time);
+    //        InvincibleGraphic++;
+    //        if(InvincibleGraphic%2==0)
+    //        {
+    //            InvincibleGraphic = 0;
+    //        }
+    //    }
+    //    HPBar.enabled = false;
+    //}
     void InvincibleCheck()
     {
         if (Invincible)
         {
             invincibleTime += Time.deltaTime;
-            if(invincibleTime > InvincibleTimeCheck)
+            if(invincibleTime >= InvincibleTimeCheck)
             {
                 Invincible = false;
                 invincibleTime = 0;
@@ -155,10 +163,14 @@ public class PlayerBlock : Block
     {
         if (Invincible)
         {
+            HPBar.enabled = true;
+            InvincibleGraphic = Mathf.FloorToInt(invincibleTime*2)%2;
             spriteRenderer.color = new Color(1,1,1,0.5f+(InvincibleGraphic*0.5f));
+            
         }
         else
         {
+            HPBar.enabled = false;
             spriteRenderer.color = Color.white;
         }
     }
@@ -168,36 +180,80 @@ public class PlayerBlock : Block
         if (collision.gameObject.CompareTag("NPCBlock"))
         {
             NPCBlock otherInfo = collision.gameObject.GetComponent<NPCBlock>();
-            if (otherInfo != null&&this.isLive)
-            {
-                if (otherInfo.Number < this.Number)//내가 잡아먹는 경우
-                {
-                    this.Number++;
-                    NumberRender();
-                    Timeline.instance.sizeRender();
-                    otherInfo.SelfDestroy();
-                }
-                else
-                {
-                    if (Invincible)
-                    {
-
-                    }
-                    else
-                    {
-                        HPCalc(-1*DR);
-                        Invincible = true;
-                        StartCoroutine(blink(0.5f));
-                    }
-                    otherInfo.FadeOutDestroy();
-                }
-            }
-            else
-            {
-                otherInfo.SelfDestroy();
-            }
+            CollisionNPC(otherInfo);
+            return;
         }
+        if (collision.gameObject.CompareTag("Item"))
+        {
+            ItemBlock otherInfo = collision.gameObject.GetComponent<ItemBlock>();
+            CollisionItem(otherInfo);
+            return;
+        }
+
     }
+
+    void CollisionNPC(NPCBlock otherInfo)
+    {
+        if (otherInfo == null || !this.isLive)//내가 살아있지 않은 경우 삭제하고 끝
+        {
+            otherInfo.SelfDestroy();
+            return;
+        }
+        //if (otherInfo.Number < this.Number)//내가 잡아먹는 경우
+        if(otherInfo.Eatable_)
+        {
+            this.Number++;
+            NumberRender();
+            Timeline.instance.sizeRender(Mirrored);
+            otherInfo.SelfDestroy();
+            return;
+        }
+        otherInfo.FadeOutDestroy();//내가 맞는경우
+        if (Invincible||obj_InvincibleEffect.activeSelf)//무적시간인 경우 데미지 판정 없음
+        {
+            return;
+        }
+        HPCalc(-1 * DR);//데미지 판정
+        InvincibleTimeCheck = InvincibleTimeCheck_template;//기본 무적시간
+        Invincible = true;
+        //StartCoroutine(blink(0.5f));
+        
+    }
+
+    void CollisionItem(ItemBlock otherInfo)
+    {
+        //Debug.Log(otherInfo.ItemCode);
+        otherInfo.Item_Use();
+    }
+    public void UpBalance(int amount)
+    {
+        ThisRoundBalance += amount;
+    }
+    public void SetItemTime(float time)
+    {
+        ItemTimeLimit = time;
+        ItemTime = 0;
+    }
+    void ItemTimeCheck()
+    {
+        if (ItemTime == -1)
+        {
+            return;
+        }
+        if (ItemTime < ItemTimeLimit)
+        {
+            ItemTime += Time.deltaTime;
+            return;
+        }
+        obj_Shield.SetActive(false);
+        obj_InvincibleEffect.SetActive(false);
+        Mirrored = false;
+        Timeline.instance.sizeRender(Mirrored);
+        ItemTime = -1;
+        InvincibleTimeCheck = InvincibleTimeCheck_template;//기본 무적시간
+        Invincible = true;
+    }
+
     void HPCalc(float value)
     {
         this.HP += value;
@@ -209,18 +265,20 @@ public class PlayerBlock : Block
             int ResultScore = Mathf.FloorToInt(this.Number * ResultMag);
             ScoreWriter.Instance.Score = ResultScore;
             ScoreWriter.Instance.AppendHighScore();
-            UpgradeScript.Instance.AppendResult(ResultScore);
-            GameOverRender(GameOverText);
+            UpgradeScript.Instance.AppendResult(ThisRoundBalance);
+            GameOverRender(GameOverText,CoinResultText);
             GameOver.SetActive(true);
             //this.GetComponent<SpriteRenderer>().color = Color.black;
         }
     }
-    void GameOverRender(TMP_Text text)
+    void GameOverRender(TMP_Text Scoretext, TMP_Text CoinText)
     {
         string txt = "x ";
         txt += ResultMag.ToString("F3");
         txt += Environment.NewLine + "= ";
         txt += Mathf.FloorToInt(this.Number * ResultMag).ToString();
-        text.text = txt;
+        Scoretext.text = txt;
+        txt = "x " + ThisRoundBalance.ToString();
+        CoinText.text = txt;
     }
 }

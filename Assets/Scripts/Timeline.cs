@@ -18,6 +18,9 @@ public class Timeline : MonoBehaviour
     public float difficulty_HostileFactor, difficulty_SpeedFactor;
     List<float> times;
     [SerializeField] Button btn_ReturnToMain;
+    public int ItemUnlocked=0;
+    [SerializeField] List<GameObject> List_Items;
+    [SerializeField] float ItemRate;
 
     private void Awake()
     {
@@ -57,8 +60,13 @@ public class Timeline : MonoBehaviour
                 switch (i)//각 타임라인별 행동
                 {
                     case 0:
-                        //Debug.Log("case 0");
                         SpawnNPC();
+                        break;
+                    case 1:
+                        SpawnItem(coin: true); 
+                        break;
+                    case 2:
+                        SpawnItem();
                         break;
                     default:
                         break;
@@ -116,8 +124,6 @@ public class Timeline : MonoBehaviour
         }
         Vector2 playerPos = PlayerBlock.Instance.transform.position;
         int SpawnNumber = Random.Range(difficulty_NumRangeMin, difficulty_NumRangeMax + 1) + PlayerBlock.Instance.Number;
-        //Debug.Log("Number " + SpawnNumber+ " SpawnDir : "+ SpawnDir+ ", randomAngle : "+ RandomAngle+ ", randomPoint : ["+ SpawnPoint.x + "," + SpawnPoint.y+ "]") ;
-        //GameObject block = Instantiate(NPCPrefab,SpawnPoint+playerPos,Quaternion.Euler(0,0,0),NPCHolder);
         GameObject block = Blocks[BlockCur];
         block.transform.position = SpawnPoint + playerPos;
         block.GetComponent<SpriteRenderer>().color = Color.white;
@@ -134,7 +140,6 @@ public class Timeline : MonoBehaviour
                 ;//-15~15 범위에서 0.7~1.3 속도, 작을수록 빠름, 1점마다 +0.005씩 속도 증가
             if (blockInfo.Hostile)
             {
-                //float angle = Vector2.Angle(SpawnPoint,playerBlock.gameObject.transform.position)*Mathf.Deg2Rad;
                 blockInfo.direction = (PlayerBlock.Instance.transform.position - block.transform.position).normalized;
                 blockInfo.Number += 2;
             }
@@ -154,14 +159,51 @@ public class Timeline : MonoBehaviour
         }
         //Debug.Log("spawned");
     }
-    public void sizeRender()
+
+    void SpawnItem(bool coin = false)
+    {
+        Vector2 SpawnPoint = new Vector2(Random.Range(-SpawnRange, SpawnRange), Random.Range(-SpawnRange, SpawnRange));
+        if (coin)
+        {
+            Instantiate(List_Items[0], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+        float RandRes = Random.Range(0f, 1f);
+        if(ItemUnlocked >= 5&&RandRes>=ItemRate*4&&RandRes<ItemRate*5)
+        {
+            Instantiate(List_Items[5], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+        if (ItemUnlocked >= 4 && RandRes >= ItemRate * 3 && RandRes < ItemRate * 4)
+        {
+            Instantiate(List_Items[4], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+        if (ItemUnlocked >= 3 && RandRes >= ItemRate * 2 && RandRes < ItemRate * 3)
+        {
+            Instantiate(List_Items[3], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+        if (ItemUnlocked >= 2 && RandRes >= ItemRate * 1 && RandRes < ItemRate * 2)
+        {
+            Instantiate(List_Items[2], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+        if (ItemUnlocked >= 1 && RandRes < ItemRate * 1)
+        {
+            Instantiate(List_Items[1], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);
+            return;
+        }
+    }
+
+    public void sizeRender(bool Mirrored=false)
     {
         foreach(GameObject obj in Blocks)
         {
             NPCBlock blockInfo;
             if(obj != null && obj.TryGetComponent<NPCBlock>(out blockInfo))
             {
-                blockInfo.SizeRender();
+                blockInfo.SizeRender(Mirrored);
             }
         }
     }

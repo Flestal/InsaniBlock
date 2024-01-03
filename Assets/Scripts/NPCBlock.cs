@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NPCBlock : Block
 {
+    public bool Eatable_;
     public bool Hostile;
     public Vector2 direction;
     [SerializeField] Sprite Eatable, Unable;
@@ -20,7 +21,7 @@ public class NPCBlock : Block
     public void OnSpawn()
     {
         NumberRender();
-        SizeRender();
+        SizeRender(PlayerBlock.Instance.Mirrored);
         spriteRenderer.color = Color.white;
         lifetime = 0;
     }
@@ -33,17 +34,33 @@ public class NPCBlock : Block
         DestroyCheck();
         Move();
     }
-    public void SizeRender()
+    public void SizeRender(bool Mirrored=false)
     {
         int sizeGap = (this.Number - PlayerBlock.Instance.Number);
         this.transform.localScale = Vector3.one * (1+sizeGap*0.03f);//0.55배 크기~1.45배 크기, 이론상 더 클 수 있음
+        if (Mirrored)
+        {
+            if (sizeGap < 0)
+            {
+                spriteRenderer.sprite = Unable;
+                Eatable_ = false;
+            }
+            else
+            {
+                spriteRenderer.sprite = Eatable;
+                Eatable_ = true;
+            }
+            return;
+        }
         if (sizeGap < 0)
         {
             spriteRenderer.sprite = Eatable;
+            Eatable_ = true;
         }
         else
         {
             spriteRenderer.sprite = Unable;
+            Eatable_ = false;
         }
     }
     void Move()
@@ -91,5 +108,12 @@ public class NPCBlock : Block
         StopAllCoroutines();
         //Destroy(gameObject);
         this.gameObject.SetActive(false);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Shield"))
+        {
+            SelfDestroy();
+        }
     }
 }

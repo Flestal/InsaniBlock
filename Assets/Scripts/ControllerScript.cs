@@ -22,7 +22,6 @@ public class ControllerScript : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 InputPosition = new Vector2((eventData.position.x / screen_width) * 1080, (eventData.position.y / screen_height) * 2340);
-        //Vector2 inputDir = eventData.position - controller_position;
         Vector2 inputDir = InputPosition - controller_position;
         Vector2 clampedDir = inputDir.magnitude<leverRange?inputDir:inputDir.normalized*leverRange;
         Lever.anchoredPosition = clampedDir;
@@ -39,15 +38,11 @@ public class ControllerScript : MonoBehaviour, IBeginDragHandler, IEndDragHandle
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //Debug.Log("Begin Drag at ["+eventData.pressPosition.x+","+eventData.pressPosition.y+"]");
         float refineX = eventData.pressPosition.x/screen_width*1080;
         float refineY = eventData.pressPosition.y/screen_height*2340;
         Vector2 pressPositon_refined = new Vector2(refineX, refineY);
-        //Debug.Log("Refined Position : ["+refineX+","+refineY+"]");
         Controller.anchoredPosition = pressPositon_refined;
-        //Debug.Log("Anchored Position : ["+Controller.anchoredPosition.x+","+Controller.anchoredPosition.y+"]");
         controller_position = Controller.anchoredPosition;
-        //Vector2 inputDir = eventData.position - controller_position;
         Vector2 inputDir = pressPositon_refined - controller_position;
         Vector2 clampedDir = inputDir.magnitude<leverRange?inputDir:inputDir.normalized*leverRange;
         Lever.anchoredPosition = clampedDir;

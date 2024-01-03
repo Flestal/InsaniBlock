@@ -28,18 +28,6 @@ public class ScoreWriter : MonoBehaviour
         if (!Directory.Exists(Application.persistentDataPath+"/Highscore"))
         {
             Directory.CreateDirectory(Application.persistentDataPath+"/Highscore");
-            //string HighScoreText = "";
-            //HighScore.Clear();
-            //for(int i = 0; i < 10; i++)
-            //{
-            //    HighScore.Add(0);
-            //}
-            //foreach(int score in HighScore)
-            //{
-            //    HighScoreText += score.ToString()+",";
-            //}
-            //HighScoreText = HighScoreText.TrimEnd(',');
-            //File.WriteAllText(Application.persistentDataPath+"/Highscore/Highscore.txt",HighScoreText);
             ResetScore();
         }
         else
@@ -61,6 +49,7 @@ public class ScoreWriter : MonoBehaviour
         // {
         //     ScreenCapture.CaptureScreenshot(Application.dataPath + "/Capture-" + DateTime.Now.ToString("yyyy.MM.dd HH-mm-ss") + ".png");
         // }
+
     }
     public void AppendHighScore()
     {

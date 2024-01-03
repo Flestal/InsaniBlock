@@ -9,7 +9,7 @@ public class UpgradeBtnScript : MonoBehaviour
     [SerializeField] int WhatIsThisButton, MaxUpgrade, reqBalance;
     [SerializeField] List<Image> Images = new List<Image>();
     [SerializeField] TMP_Text ReqBalanceText;
-    List<Color> Colors = new List<Color>() { new Color(1,0,0),new Color(1,1,0),new Color(0,1,0) };
+    [SerializeField]List<Color> Colors = new List<Color>() { new Color(1,0,0),new Color(1,1,0),new Color(0,1,0) };
     // Start is called before the first frame update
     void Start()
     {

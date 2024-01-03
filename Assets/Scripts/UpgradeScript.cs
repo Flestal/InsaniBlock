@@ -16,7 +16,7 @@ public class UpgradeScript : MonoBehaviour
     //      뎀감(체력과 최대체력을 float로 변경) x5,
     //      무적시간 x3,
     //      최종 점수배율(int 값, 소수점 버림) x5,
-    //      맵에 아이템 생성(회복 포션, 무적 방패, , , 보호막)
+    //      맵에 아이템 생성(회복, 방패, 색반전(끝날때 무적), 녹색필터, 무적시간)
     // }
 
     private void Awake()
@@ -46,13 +46,13 @@ public class UpgradeScript : MonoBehaviour
             }
             balance = System.Convert.ToInt32(File.ReadAllText(Application.persistentDataPath + "/Upgrades/Balance.txt"));
         }
-        reqBalances = new List<int>() { 30, 30, 40, 40, 50 };
+        reqBalances = new List<int>() { 30, 30, 40, 40, 50, 30 };
     }
     public void ResetUpgrades()
     {
-        Upgrades = new List<int>() { 0, 0, 0, 0, 0 };
+        Upgrades = new List<int>() { 0, 0, 0, 0, 0, 0 };
         balance = 0;
-        string UpgradesText = "0,0,0,0,0";
+        string UpgradesText = "0,0,0,0,0,0";
         File.WriteAllText(Application.persistentDataPath + "/Upgrades/Upgrades.txt", UpgradesText);
         File.WriteAllText(Application.persistentDataPath + "/Upgrades/Balance.txt", "0");
     }
@@ -72,7 +72,7 @@ public class UpgradeScript : MonoBehaviour
     }
     public void AppendResult(int Score)
     {
-        balance += Mathf.FloorToInt(Score/10f);
+        balance += Score;
         SaveBalance();
     }
     public List<int> ReturnUpgrades()

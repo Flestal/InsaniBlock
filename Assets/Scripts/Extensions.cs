@@ -33,7 +33,7 @@ public static class Extensions
             output[0] = '-';
             //start++;
         }
-        Debug.Log(new string(output));
+        //Debug.Log(new string(output));
         return digitsNum;
     }
 }
