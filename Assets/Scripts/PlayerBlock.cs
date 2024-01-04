@@ -20,7 +20,7 @@ public class PlayerBlock : Block
     [SerializeField] float InvincibleTimeCheck_template;//무적시간
     [SerializeField]float InvincibleTimeCheck;
     [SerializeField]float invincibleTime;
-    public GameObject obj_Shield, obj_InvincibleEffect, GameOver;
+    public GameObject obj_Shield, obj_InvincibleEffect, obj_Filter, GameOver;
     [SerializeField] TMP_Text GameOverText, CoinResultText;
     [SerializeField] float ResultMag;
     public bool Mirrored;
@@ -247,6 +247,7 @@ public class PlayerBlock : Block
         }
         obj_Shield.SetActive(false);
         obj_InvincibleEffect.SetActive(false);
+        obj_Filter.SetActive(false);
         Mirrored = false;
         Timeline.instance.sizeRender(Mirrored);
         ItemTime = -1;
@@ -254,7 +255,7 @@ public class PlayerBlock : Block
         Invincible = true;
     }
 
-    void HPCalc(float value)
+    public void HPCalc(float value)
     {
         this.HP += value;
         HPBar.fillAmount = (float)this.HP/(float)this.MaxHP;

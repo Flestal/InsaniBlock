@@ -451,13 +451,18 @@ MonoBehaviour:
   HPBar: {fileID: 0}
   spriteRenderer: {fileID: 1888796517920724506}
   Score: 0
+  InvincibleTimeCheck_template: 0
   InvincibleTimeCheck: 0
+  invincibleTime: 0
   obj_Shield: {fileID: 2291456574521231652}
   obj_InvincibleEffect: {fileID: 4004612805243407110}
+  obj_Filter: {fileID: 0}
   GameOver: {fileID: 0}
   GameOverText: {fileID: 0}
+  CoinResultText: {fileID: 0}
   ResultMag: 0
   Mirrored: 0
+  ThisRoundBalance: 0
 --- !u!61 &8930396219846626436
 BoxCollider2D:
   m_ObjectHideFlags: 0

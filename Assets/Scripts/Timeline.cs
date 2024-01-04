@@ -41,6 +41,7 @@ public class Timeline : MonoBehaviour
         }
         BlockCntMax = (int)(1/timeTriggers[0])*12;
         CameraWrapper.transform.parent = PlayerBlock.Instance.transform;
+        ItemUnlocked = UpgradeScript.Instance.ReturnUpgrades()[5];
         PreSpawnNPC();
         btn_ReturnToMain.onClick.AddListener(() =>
         {
@@ -162,7 +163,7 @@ public class Timeline : MonoBehaviour
 
     void SpawnItem(bool coin = false)
     {
-        Vector2 SpawnPoint = new Vector2(Random.Range(-SpawnRange, SpawnRange), Random.Range(-SpawnRange, SpawnRange));
+        Vector2 SpawnPoint = new Vector3(Random.Range(-SpawnRange / 2f, SpawnRange / 2f), Random.Range(-SpawnRange / 2f, SpawnRange / 2f),0)+PlayerBlock.Instance.transform.position;
         if (coin)
         {
             Instantiate(List_Items[0], position: SpawnPoint, rotation: Quaternion.Euler(0, 0, 0), parent: NPCHolder);

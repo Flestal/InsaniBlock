@@ -114,6 +114,15 @@ public class NPCBlock : Block
         if (collision.CompareTag("Shield"))
         {
             SelfDestroy();
+            return;
+        }
+        if (collision.CompareTag("Filter"))
+        {
+            if (!Eatable_)
+            {
+                SelfDestroy();
+                return;
+            }
         }
     }
 }

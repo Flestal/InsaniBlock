@@ -6,6 +6,7 @@ public class Item_Heal : ItemBlock
 {
     public override void Item_Use()
     {
-        throw new System.NotImplementedException();
+        PlayerBlock.Instance.HPCalc(0.5);
+        Destroy(this.gameObject);
     }
 }
