@@ -29,8 +29,6 @@ public class NPCBlock : Block
     // Update is called once per frame
     void Update()
     {
-        //NumberRender();
-        //SizeRender();
         DestroyCheck();
         Move();
     }
@@ -67,13 +65,7 @@ public class NPCBlock : Block
     {
         this.gameObject.transform.Translate(direction * speed * Time.deltaTime);
     }
-    //WaitForSeconds wait10s = new WaitForSeconds(10);
     WaitForFixedUpdate waitF = new WaitForFixedUpdate();
-    //IEnumerator DestroyTimer()
-    //{
-    //    yield return wait10s;
-    //    yield return FadeOut();
-    //}
     void DestroyCheck()
     {
         if (lifetime < 10.0f)
@@ -96,7 +88,6 @@ public class NPCBlock : Block
             NumberAlpha(alpha);
             yield return waitF;
         }
-        //Destroy(gameObject);
         this.gameObject.SetActive(false);
     }
     public void FadeOutDestroy()
@@ -106,7 +97,6 @@ public class NPCBlock : Block
     public void SelfDestroy()
     {
         StopAllCoroutines();
-        //Destroy(gameObject);
         this.gameObject.SetActive(false);
     }
     private void OnTriggerEnter2D(Collider2D collision)

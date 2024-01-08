@@ -43,12 +43,6 @@ public class MainMenuScript : MonoBehaviour
             ClickUpgradeReset();
         });
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void ClickStartGame()
     {
         SceneManager.LoadScene(1);
@@ -66,7 +60,6 @@ public class MainMenuScript : MonoBehaviour
     void ClickHighScore()
     {
         ViewHighScore();
-        //ScoreWriter.Instance
         MainMenu.SetActive(false);
         HighScore.SetActive(true);
     }

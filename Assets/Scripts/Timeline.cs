@@ -55,8 +55,7 @@ public class Timeline : MonoBehaviour
         for(int i=0;i<times.Count; i++)
         {
             times[i] += Time.deltaTime;
-            //Debug.Log("times["+i+"] : "+times[i]);
-            if (times[i] >= timeTriggers[i])//타임라인 달성 시
+            if (times[i] >= timeTriggers[i])//타임라인 시간 도달 시
             {
                 switch (i)//각 타임라인별 행동
                 {
@@ -158,7 +157,6 @@ public class Timeline : MonoBehaviour
         {
             BlockCur = 0;
         }
-        //Debug.Log("spawned");
     }
 
     void SpawnItem(bool coin = false)

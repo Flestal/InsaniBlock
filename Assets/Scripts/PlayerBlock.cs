@@ -269,7 +269,6 @@ public class PlayerBlock : Block
             UpgradeScript.Instance.AppendResult(ThisRoundBalance);
             GameOverRender(GameOverText,CoinResultText);
             GameOver.SetActive(true);
-            //this.GetComponent<SpriteRenderer>().color = Color.black;
         }
     }
     void GameOverRender(TMP_Text Scoretext, TMP_Text CoinText)
